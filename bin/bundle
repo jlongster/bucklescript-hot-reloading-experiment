@@ -1,0 +1,4 @@
+#!/bin/sh
+
+root=`dirname $0`
+"$root"/../node_modules/.bin/webpack --config "$root/webpack.config.js"

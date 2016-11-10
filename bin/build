@@ -1,0 +1,16 @@
+#!/bin/sh
+
+root=`dirname $0`
+
+rm -rf static/build
+mkdir -p static/build/self
+
+sortedFiles=$(ocamldep -ppx ./node_modules/bs-platform/bin/bsppx.exe -pp refmt -sort -ml-synonym .re src/*.re)
+
+for source in $sortedFiles; do
+    dest=$(echo $source | sed "s/src/static\/build\/self/" | sed "s/\.re$/.js/")
+    ./node_modules/bs-platform/bin/bsc.exe \
+        -bs-package-name self -bs-package-output commonjs:static/build/self \
+        -I static/build/self \
+        -g -bin-annot -pp refmt -c -o "$dest" -impl "$source"
+done
